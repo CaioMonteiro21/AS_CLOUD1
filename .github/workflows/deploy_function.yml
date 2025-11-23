@@ -1,0 +1,57 @@
+name: Deploy Azure Function - Galeria de Artes
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      # Gatilho: Executa apenas se houver mudanças na pasta do Backend
+      - 'ArtGalleryFunction/**' 
+  workflow_dispatch: # Permite execução manual do workflow
+
+env:
+  # Nome da sua Azure Function App (deve corresponder ao nome no Azure)
+  FUNCTION_APP_NAME: 'fa-galeriadeartes' 
+  # Nome do Grupo de Recursos
+  RESOURCE_GROUP: 'RG-GaleriaDeArtes'
+  # Versão do Python (deve corresponder à versão configurada na Function App)
+  PYTHON_VERSION: '3.10' 
+  # Caminho para a pasta do código da função
+  AZURE_FUNCTION_FOLDER: 'ArtGalleryFunction' 
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 1. Checkout do Código
+        uses: actions/checkout@v4
+
+      - name: 2. Login no Azure
+        uses: azure/login@v1
+        with:
+          # Usa as credenciais armazenadas nos Segredos do GitHub
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: 3. Configurar Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          
+      - name: 4. Instalar Dependências
+        working-directory: ${{ env.AZURE_FUNCTION_FOLDER }}
+        run: |
+          python -m pip install --upgrade pip
+          # Instala as dependências listadas no requirements.txt
+          pip install -r requirements.txt
+          # Instala dependências no diretório local para o pacote de deploy
+          pip install --target="./.python_packages/lib/site-packages" -r requirements.txt
+
+      - name: 5. Deploy da Azure Function
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ env.FUNCTION_APP_NAME }}
+          package: ${{ env.AZURE_FUNCTION_FOLDER }}
+          # Configurações de build durante o deploy
+          scm-do-build-during-deployment: true
+          enable-oryx-build: true
