@@ -5,11 +5,9 @@ on:
     branches:
       - main
     paths:
-      # Gatilho: Executa apenas se houver mudanças na pasta do Frontend ou configurações
       - 'src/**'
-      - 'public/**'
-      - 'package.json'
-  workflow_dispatch: # Permite execução manual do workflow
+      - 'package.json' 
+  workflow_dispatch:
 
 jobs:
   build_and_deploy_job:
@@ -26,26 +24,19 @@ jobs:
           node-version: 18
 
       - name: 2. Instalar Dependências do Frontend
-        # Roda o npm install na raiz (onde está o package.json)
         run: npm install
 
       - name: 3. Build da Aplicação React
-        # Cria a pasta 'build' otimizada para produção
         run: npm run build 
         
       - name: 4. Deploy para Azure Static Web App
         id: builddeploy
         uses: azure/static-web-apps-deploy@v1
         with:
-          # Token de deploy (Gerado pelo Azure ao criar o recurso Static Web App)
-          # Certifique-se de que este segredo existe no seu repositório GitHub
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
+          # CRÍTICO: SUBSTITUA PELO NOME EXATO DO SEU SEGREDO NO GITHUB!
+          # O nome é o longo que termina em "069413D10"
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_GENTLE_WAVE_069413D10 }}
           repo_token: ${{ secrets.GITHUB_TOKEN }} 
           action: "upload"
-          # --- Configurações do Caminho ---
-          # Onde está o código fonte do frontend (Raiz do repositório)
           app_location: "/" 
-          # Onde está o código do backend (Deixamos vazio pois usamos uma Function App separada)
-          api_location: "" 
-          # Onde o comando 'npm run build' coloca os arquivos finais (React padrão é 'build')
           output_location: "build"
