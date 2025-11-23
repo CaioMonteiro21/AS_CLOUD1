@@ -31,6 +31,7 @@ const IconImage = ({ className }) => (
 // *** IMPORTANTE: Substitua pela URL da sua Azure Function App ***
 const API_BASE_URL = "https://fa-galeriadeartes.azurewebsites.net/api/galeria";
 
+
 const App = () => {
   const [obras, setObras] = useState([]);
   const [loading, setLoading] = useState(true);
