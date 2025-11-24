@@ -1,4 +1,4 @@
-name: Build and deploy Python project to Azure Function App - fa-galeriadeartes
+name: Deploy Azure Function - fa-galeriadeartes
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'ArtGalleryFunction' 
+  AZURE_FUNCTION_FOLDER: 'ArtGalleryFunction'  # pasta da sua Function App
   PYTHON_VERSION: '3.10'
 
 jobs:
@@ -20,25 +20,31 @@ jobs:
         uses: actions/checkout@v4
 
       # 2️⃣ Setup Python
-      - name: Setup Python version
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
         uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
       # 3️⃣ Instalar dependências
       - name: Install dependencies
-        working-directory: ./ArtGalleryFunction
+        working-directory: ${{ env.AZURE_FUNCTION_FOLDER }}
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install --target="./.python_packages/lib/site-packages" -r requirements.txt
 
-      # 4️⃣ Deploy para Azure Functions
-      - name: Deploy to Azure Functions
+      # 4️⃣ Criar pacote ZIP
+      - name: Create zip package
+        working-directory: ${{ env.AZURE_FUNCTION_FOLDER }}
+        run: |
+          zip -r ../function.zip .
+
+      # 5️⃣ Deploy via publish profile
+      - name: Deploy to Azure Function App
         uses: Azure/functions-action@v1
         with:
           app-name: 'fa-galeriadeartes'
-          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+          package: './function.zip'
           publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
           scm-do-build-during-deployment: true
           enable-oryx-build: true
