@@ -1,0 +1,13 @@
+# IGNORAR ARQUIVOS DA RAIZ DO PROJETO (FRONTEND, GIT, ETC.)
+package.json
+package-lock.json
+host.json
+.git
+.gitignore
+.vscode
+.venv
+__pycache__
+/src/
+/public/
+/deploy_artgallery/
+# Continue a adicionar aqui qualquer pasta/arquivo que não seja essencial para a função

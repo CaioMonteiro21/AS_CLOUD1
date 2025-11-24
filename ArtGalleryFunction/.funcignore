@@ -1,0 +1,7 @@
+.venv/
+venv/
+python_packages/
+.python_packages/
+local.settings.json
+.git/
+.vscode/
