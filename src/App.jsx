@@ -28,8 +28,7 @@ const IconImage = ({ className }) => (
   </svg>
 );
 
-// *** IMPORTANTE: Substitua pela URL da sua Azure Function App ***
-const API_BASE_URL = "https://fa-galeriadeartes.azurewebsites.net/api/galeria";
+const API_BASE_URL = "/api/http_trigger";
 
 
 const App = () => {
