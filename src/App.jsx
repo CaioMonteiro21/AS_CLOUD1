@@ -28,7 +28,7 @@ const IconImage = ({ className }) => (
   </svg>
 );
 
-const API_BASE_URL = "https://fa-galeriadeartes.azurewebsites.net/api/http_trigger";
+const API_BASE_URL = "https://fa-galeriadeartes.azurewebsites.net/api/galeria";
 
 
 const App = () => {
