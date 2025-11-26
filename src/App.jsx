@@ -28,8 +28,8 @@ const IconImage = ({ className }) => (
   </svg>
 );
 
-const API_BASE_URL = "https://fa-galeriadeartes.azurewebsites.net/api/galeria";
-
+// URL CORRIGIDA COM O DOMÍNIO REAL DA AZURE
+const API_BASE_URL = "https://fa-galeriadeartes-c6buhme9dtffh8f4.eastus2-01.azurewebsites.net/api/galeria";
 
 const App = () => {
   const [obras, setObras] = useState([]);
