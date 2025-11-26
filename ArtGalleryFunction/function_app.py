@@ -144,18 +144,16 @@ def galeria(req: func.HttpRequest) -> func.HttpResponse:
         dados_galeria = montar_galeria(obras_do_db)
 
         # 3. Retorna a resposta HTTP 200 com o JSON
+    # 3. Retorna a resposta HTTP 200 com o JSON
         return func.HttpResponse(
-            json.dumps(dados_galeria, ensure_ascii=False), # Garante caracteres especiais (acentos)
+            json.dumps(dados_galeria, ensure_ascii=False), 
             mimetype="application/json",
             status_code=200,
             headers={
-                # Cabeçalhos CORS para permitir que o Frontend (Static Web App) acesse a API
-                "Access-Control-Allow-Origin": "*", 
-                "Access-Control-Allow-Methods": "GET",
                 "Content-Type": "application/json; charset=utf-8"
             }
         )
-
+    
     except Exception as e:
         # Captura erros não tratados e retorna erro 500
         logging.error(f"Erro não tratado ao processar a requisição: {e}", exc_info=True)
